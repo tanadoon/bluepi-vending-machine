@@ -1,0 +1,33 @@
+class VendingMachineService:
+    def __init__(self):
+        self.accept_coin = [1, 5, 10]
+        self.available_coin = self._init_available_coin
+        self.product_list = self._init_product_list
+        pass
+    
+    def _init_available_coin():
+        return {
+            '1': 1,
+            '5': 1,
+            '10': 1
+        }
+
+    def _init_product_list():
+        return [
+            {
+                'name': 'Pepsa non soda but za',
+                'name_th': 'เป๊ปซ่า น้ำไม่อัดลมแต่เสือกซ่า',
+                'price': 15,
+                'stock': 200
+            }, {
+                'name': 'Cake Not Coke but Cake',
+                'name_th': 'น้ำซ่าตราเค้ก',
+                'price': 20,
+                'stock': 2
+            }, {
+                'name': 'Peach Soda',
+                'name_th': 'น้ำซ่า 0 แคล รสพีช',
+                'price': 10,
+                'stock': 0
+            },
+        ]
