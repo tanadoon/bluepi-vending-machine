@@ -42,15 +42,24 @@ if __name__ == '__main__':
     mock_option = 1
     print(f'\nBuy Product: {purchaseable_product_list[mock_option].get("name")}')
 
-    # State 6 change money from reserved change coins
+    # State 6 change money from reserved change coins + input coins
     amount_changes = money_input - purchaseable_product_list[mock_option].get('price')
-    print(f'Remaining Money: {amount_changes} baht')
-    vending_machine.change_coins(amount_changes)
+    print(f'Remaining Money: {amount_changes} baht.')
+    change_coins = vending_machine.calculte_change_coins(amount_changes)
 
-    # State 7 check from change_coins if empty it mean vending machine reserved change coins is not enough to change user just cancel order and return all input coins if not return as cahnge_coins dict
-
-    # State 8 update product stock and reserved change coins in machine
-
+    # State 7 check from change_coins if empty it mean vending machine coins is not enough to change user just cancel order and return all input coins if not return as cahnge coins dict
+    if change_coins:
+        print(f'Change Coins: {change_coins}\n')
+        vending_machine.update_reserved_change_coins(change_coins=change_coins, reset_input_coin_flag=True)
+    else:
+        print(f'Not enough coins to change cancelled order and return input coins : {vending_machine.input_coins}\n')
+        vending_machine.reset_input_coin()
+    
+    # State 8 Re-balance reserved change coins in machine and reset input coins
+    print(f'After re-balance: \n reserved_change_coins: {vending_machine.reserved_change_coins} \n input_coins: {vending_machine.input_coins}\n')
+    
+    # State 9 update product stock 
+    vending_machine.update_product_stock_with_barcode_id(barcode_id=purchaseable_product_list[mock_option].get('barcode_id'))
     
     # print('Input Your Coin Value ...')
     # value_coin = input()
