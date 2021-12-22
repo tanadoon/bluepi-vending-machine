@@ -1,3 +1,4 @@
+from collections import defaultdict
 from vending_machine_service.service import VendingMachineService
 
 
@@ -9,52 +10,47 @@ from vending_machine_service.service import VendingMachineService
 #         return False
 
 
-# def list_available_product(input_money: int) -> list:
-#     return [product for product in product_list if product.get('stock') > 0 and input_money > product.get('price')]
-
-
-# def init_vending_machine():
-#     pass
+def simplify_showing_product(product_list: list):
+    for index, product in enumerate(product_list):
+        print(f'Product#{index+1} : {product.get("name")}\tprice: {product.get("price")} baht.')
 
 
 if __name__ == '__main__':
     vending_machine = VendingMachineService()
-    print(vending_machine.available_coin)
-    # # State 1 Input coin
-    # print(f'Before re-balance: {available_coin}')
-    # sample_input = {
-    #     '1': 20,
-    #     '2': 5,
-    #     '5': 2,
-    #     '10': 0
-    # }
 
-    # # State 2 After finish input coin, update available coin to available coin in machine
-    # available_coin.update({
-    #     '1': available_coin.get('1') + sample_input.get('1'),
-    #     '5': available_coin.get('5') + sample_input.get('5'),
-    #     '10': available_coin.get('10') + sample_input.get('10'),
-    # })
-    # print(f'After re-balance: {available_coin}')
+    # State 1 Input coins
+    print(f'Before re-balance: \n reserved_change_coins: {vending_machine.reserved_change_coins} \n input_coins: {vending_machine.input_coins}\n')
+    sample_input = {
+        '1': 20,
+        '5': 2,
+        '10': 0
+    }
+
+    # State 2 After finish input coin, update input coins to input list in machine
+    vending_machine.update_input_state(sample_input)
+    print(f'After Input coins: \n reserved_change_coins: {vending_machine.reserved_change_coins} \n input_coins: {vending_machine.input_coins}\n')
 
     # # State 3 Show money input as total input coin
-    # amount_money_input = sample_input.get('1') + sample_input.get('5') + sample_input.get('10')
-    # print(f'Input Money: {amount_money_input}')
+    money_input = vending_machine.show_money_input()
+    print(f'Input Money: {vending_machine.show_money_input()} baht.\n')
 
     # # State 4 Show Product list if stock > 0 show else not
-    # sample_product_list = list_available_product(amount_money_input)
-    # print(sample_product_list)
+    purchaseable_product_list = vending_machine.list_purchaseable_products(money_input)
+    print('Purchaseable Product List:')
+    simplify_showing_product(purchaseable_product_list)
 
     # # State 5 Buy 1 product
-    # mock_option = 1
-    # print(f'Buy Product: {sample_product_list[mock_option].get("name_th")}')
+    mock_option = 1
+    print(f'\nBuy Product: {purchaseable_product_list[mock_option].get("name")}')
 
-    # # State 6 change money from available coin
-    # change_amount = amount_money_input - sample_product_list[mock_option].get('price')
-    # print(f'Remaining Money: {change_amount}')
+    # State 6 change money from reserved change coins
+    amount_changes = money_input - purchaseable_product_list[mock_option].get('price')
+    print(f'Remaining Money: {amount_changes} baht')
+    vending_machine.change_coins(amount_changes)
 
-    # # State 7 update product stock and available_coin in machine
-    # # If not enough to change money return all input money
+    # State 7 check from change_coins if empty it mean vending machine reserved change coins is not enough to change user just cancel order and return all input coins if not return as cahnge_coins dict
+
+    # State 8 update product stock and reserved change coins in machine
 
     
     # print('Input Your Coin Value ...')
