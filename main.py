@@ -1,4 +1,3 @@
-from collections import defaultdict
 from vending_machine_service.service import VendingMachineService
 
 
