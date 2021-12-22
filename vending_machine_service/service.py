@@ -48,7 +48,7 @@ class VendingMachineService:
     def show_money_input(self):
         total = 0
         for coin in self.accept_coin:
-            total += coin*self.input_coins.get(f'{coin}')
+            total += coin*self.input_coins.get(f'{coin}', 0)
 
         return total
     
@@ -104,3 +104,6 @@ class VendingMachineService:
                 product.update({
                     'stock': product.get('stock') + amount_change
                 })
+    
+    def validate_acceptable_coin(self, input_coin: int) -> bool:
+        return input_coin in self.accept_coin
