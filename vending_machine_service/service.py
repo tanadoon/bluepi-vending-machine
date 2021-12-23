@@ -96,11 +96,12 @@ class VendingMachineService:
             self.reset_input_coin()
     
     def update_product_stock_with_barcode_id(self, barcode_id: str, amount_change: int = -1) -> None:
-        for product in self.product_list:
-            if product.get('barcode_id') == barcode_id:
-                product.update({
-                    'stock': product.get('stock') + amount_change
-                })
+        if isinstance(barcode_id, str):
+            for product in self.product_list:
+                if product.get('barcode_id') == barcode_id.strip():
+                    product.update({
+                        'stock': product.get('stock') + amount_change
+                    })
     
     def validate_acceptable_coin(self, input_coin: int) -> bool:
         return input_coin in self.accept_coin
