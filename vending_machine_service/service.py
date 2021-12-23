@@ -48,16 +48,12 @@ class VendingMachineService:
     def show_money_input(self):
         total = 0
         for coin in self.accept_coin:
-            total += coin*self.input_coins.get(f'{coin}', 0)
-
+            amount = coin*self.input_coins.get(f'{coin}', 0) if isinstance(self.input_coins.get(f'{coin}', 0), int) else 0
+            total += amount
         return total
     
-    def list_purchaseable_products(self, total_money) -> list:
-        # result_list = []
-        # for product in self.product_list:
-        #     if product.get('stock') > 0 and total_money > product.get('price'):
-        #         result_list.append(product)
-
+    def list_purchaseable_products(self, total_money: int) -> list:
+        if not isinstance(total_money, int): total_money = 0
         return [product for product in self.product_list if product.get('stock') > 0 and total_money > product.get('price')]
 
     def _create_change_coins_pool(self) -> list:
@@ -107,3 +103,10 @@ class VendingMachineService:
     
     def validate_acceptable_coin(self, input_coin: int) -> bool:
         return input_coin in self.accept_coin
+
+    def _update_product_list(self, product_list: list) -> None:
+        if product_list:
+            self.product_list = product_list
+    
+    def _reset_product_list(self) -> None:
+        self.product_list = self._init_product_list
