@@ -374,3 +374,33 @@ def test_ensure_value(vending_machine_service_obj):
     assert vending_machine_service_obj._ensure_value(test_element_2, test_check_type, test_default_return_value) == expected_result_2
     assert vending_machine_service_obj._ensure_value(test_element_3, test_check_type, test_default_return_value) == expected_result_2
     assert vending_machine_service_obj._ensure_value(test_element_4, test_check_type, test_default_return_value) == expected_result_2
+
+
+def test_update_reserved_change_coins_with_reset_input_case(vending_machine_service_obj):
+    test_input_coin = {'1': 10, '5': 2, '10': 0}
+    test_change_coin = {'1': 2}
+    test_reset_flag = True
+
+    expected_reserved_change_coins = {'1': 18, '5': 4, '10': 2}
+    expected_input_coin = vending_machine_service_obj._init_input_coins()
+
+    vending_machine_service_obj.update_input_state(test_input_coin)
+    vending_machine_service_obj.update_reserved_change_coins(test_change_coin, test_reset_flag)
+
+    assert vending_machine_service_obj.reserved_change_coins == expected_reserved_change_coins
+    assert vending_machine_service_obj.input_coins == expected_input_coin
+
+
+def test_update_reserved_change_coins_with_no_reset_input_case(vending_machine_service_obj):
+    test_input_coin = {'1': 10, '5': 2, '10': 0}
+    test_change_coin = {'1': 2}
+    test_reset_flag = False
+
+    expected_reserved_change_coins = {'1': 18, '5': 4, '10': 2}
+    expected_input_coin = test_input_coin
+
+    vending_machine_service_obj.update_input_state(test_input_coin)
+    vending_machine_service_obj.update_reserved_change_coins(test_change_coin, test_reset_flag)
+
+    assert vending_machine_service_obj.reserved_change_coins == expected_reserved_change_coins
+    assert vending_machine_service_obj.input_coins == expected_input_coin
