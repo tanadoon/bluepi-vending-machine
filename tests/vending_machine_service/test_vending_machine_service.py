@@ -404,3 +404,42 @@ def test_update_reserved_change_coins_with_no_reset_input_case(vending_machine_s
 
     assert vending_machine_service_obj.reserved_change_coins == expected_reserved_change_coins
     assert vending_machine_service_obj.input_coins == expected_input_coin
+
+
+def test_update_product_stock_with_barcode_id_valid_case(vending_machine_service_obj):
+    test_barcode_id = '001'
+    test_barcode_id_2 = ' 001 '
+    test_amount_change = -10
+
+    test_product_list = [
+        {
+            'barcode_id': '001',
+            'name': 'Test Product 1',
+            'stock': 200
+        }
+    ]
+
+    vending_machine_service_obj._update_product_list(test_product_list)
+
+    vending_machine_service_obj.update_product_stock_with_barcode_id(test_barcode_id)
+    assert vending_machine_service_obj.product_list[0].get('stock') == 199
+    vending_machine_service_obj.update_product_stock_with_barcode_id(test_barcode_id_2, test_amount_change)
+    assert vending_machine_service_obj.product_list[0].get('stock') == 189
+
+
+def test_update_product_stock_with_barcode_id_invalid_case(vending_machine_service_obj):
+    test_barcode_id = None
+    test_barcode_id = 1
+
+    test_product_list = [
+        {
+            'barcode_id': '001',
+            'name': 'Test Product 1',
+            'stock': 200
+        }
+    ]
+
+    vending_machine_service_obj._update_product_list(test_product_list)
+
+    vending_machine_service_obj.update_product_stock_with_barcode_id(test_barcode_id)
+    assert vending_machine_service_obj.product_list[0].get('stock') == 200
