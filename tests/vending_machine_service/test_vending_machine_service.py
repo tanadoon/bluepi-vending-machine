@@ -286,6 +286,7 @@ def test_reset_input_coin(vending_machine_service_obj):
     
     assert vending_machine_service_obj.input_coins == expected_result
 
+
 def test_validate_acceptable_coin(vending_machine_service_obj):
     test_coin_1 = 1
     test_coin_2 = 2
@@ -326,3 +327,50 @@ def test_update_product_list_valid_case(vending_machine_service_obj):
     vending_machine_service_obj._update_product_list(test_product_list)
     
     assert vending_machine_service_obj.product_list == expected_result
+
+
+def test_update_product_list_invalid_case(vending_machine_service_obj):
+    test_product_list = []
+    test_product_list_2 = None
+
+    expected_result = vending_machine_service_obj._init_product_list()
+
+    vending_machine_service_obj._update_product_list(test_product_list)
+    assert vending_machine_service_obj.product_list == expected_result
+    vending_machine_service_obj._update_product_list(test_product_list_2)
+    assert vending_machine_service_obj.product_list == expected_result
+
+
+def test_reset_product_list(vending_machine_service_obj):
+    test_product_list = [
+        {
+            'name': 'test_product_001',
+            'price': 15,
+            'stock': 10
+        }
+    ]
+
+    expected_result = vending_machine_service_obj._init_product_list()
+
+    vending_machine_service_obj._update_product_list(test_product_list)
+    vending_machine_service_obj._reset_product_list()
+    
+    assert vending_machine_service_obj.product_list == expected_result
+
+
+def test_ensure_value(vending_machine_service_obj):
+    test_element = 1
+    test_element_2 = '1'
+    test_element_3 = 1.5
+    test_element_4 = None
+
+    test_check_type = int
+    test_default_return_value = 0
+    
+    expected_result = 1
+    expected_result_2 = 0
+
+    assert vending_machine_service_obj._ensure_value(test_element, test_check_type, test_default_return_value) == expected_result
+    assert vending_machine_service_obj._ensure_value(test_element_2, test_check_type, test_default_return_value) == expected_result_2
+    assert vending_machine_service_obj._ensure_value(test_element_3, test_check_type, test_default_return_value) == expected_result_2
+    assert vending_machine_service_obj._ensure_value(test_element_4, test_check_type, test_default_return_value) == expected_result_2
