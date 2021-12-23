@@ -110,7 +110,7 @@ class VendingMachineService:
             self.product_list = product_list
     
     def _reset_product_list(self) -> None:
-        self.product_list = self._init_product_list
+        self.product_list = self._init_product_list()
 
     def _ensure_value(self, element, check_type, default_return_value):
         return element if isinstance(element, check_type) else default_return_value
