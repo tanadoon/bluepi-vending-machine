@@ -57,10 +57,11 @@ class VendingMachineService:
         return [product for product in self.product_list if product.get('stock') > 0 and total_money > product.get('price')]
 
     def _create_change_coins_pool(self) -> list:
-        return [[coin_value, self.reserved_change_coins.get(f'{coin_value}', 0) + self.input_coins.get(f'{coin_value}', 0)] for coin_value in self.accept_coin[::-1]]
-
+        return [[coin_value, self.reserved_change_coins.get(f'{coin_value}', 0) + self._ensure_value(self.input_coins.get(f'{coin_value}', 0), int, 0)] for coin_value in self.accept_coin[::-1]]
 
     def calculate_change_coins(self, amount_change: int) -> dict:
+        if not isinstance(amount_change, int) or not amount_change:
+            return {}
         self.min_coin = float("inf")
         self.change_list = []
         self._do_calculate_minimum_coin_to_change(amount_change=amount_change, change_coins_pool=self._create_change_coins_pool())
@@ -110,3 +111,6 @@ class VendingMachineService:
     
     def _reset_product_list(self) -> None:
         self.product_list = self._init_product_list
+
+    def _ensure_value(self, element, check_type, default_return_value):
+        return element if isinstance(element, check_type) else default_return_value
